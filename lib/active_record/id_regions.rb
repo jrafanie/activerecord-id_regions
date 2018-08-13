@@ -129,7 +129,7 @@ module ActiveRecord::IdRegions
       sequence_name = connection.select_value("SELECT relname FROM pg_class WHERE relkind = 'S' LIMIT 1")
       puts "FROM sequence 2: #{sequence_name}"
       return if sequence_name.nil?
-      puts "FROM sequence 2.5: #{ActiveRecord::Base.connection.select_all("SELECT * FROM users_id_seq").first}"
+      # puts "FROM sequence 2.5: #{ActiveRecord::Base.connection.select_all("SELECT * FROM users_id_seq").first}"
       id_to_region(connection.select_value("SELECT last_value FROM #{sequence_name}")).tap { |i| puts "FROM sequence 3: #{i}" }
     end
 
