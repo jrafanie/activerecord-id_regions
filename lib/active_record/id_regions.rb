@@ -141,6 +141,7 @@ module ActiveRecord::IdRegions
       region_num ||= ENV.fetch("REGION", nil)
       puts "DISCOVERY 2: #{region_num}"
       region_num ||= region_number_from_sequence
+      puts "DISCOVERY 2.5: #{ActiveRecord::Base.connection.select_all("SELECT * FROM users_id_seq").first}"
       puts "DISCOVERY 3: #{region_num}"
       region_num.to_i
     end
