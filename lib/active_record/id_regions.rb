@@ -15,7 +15,7 @@ module ActiveRecord::IdRegions
   module ClassMethods
     def my_region_number(force_reload = false)
       clear_region_cache if force_reload
-      @@my_region_number ||= discover_my_region_number
+      @@my_region_number ||= discover_my_region_number.tap { |i| puts "DISCOVERED #{i}"}
     end
 
     def rails_sequence_factor
@@ -125,9 +125,11 @@ module ActiveRecord::IdRegions
     end
 
     def region_number_from_sequence
+      puts "FROM sequence 1"
       sequence_name = connection.select_value("SELECT relname FROM pg_class WHERE relkind = 'S' LIMIT 1")
+      puts "FROM sequence 2: #{sequence_name}"
       return if sequence_name.nil?
-      id_to_region(connection.select_value("SELECT last_value FROM #{sequence_name}"))
+      id_to_region(connection.select_value("SELECT last_value FROM #{sequence_name}")).tap { |i| puts "FROM sequence 3: #{i}" }
     end
 
     private
@@ -135,8 +137,11 @@ module ActiveRecord::IdRegions
     def discover_my_region_number
       region_file = Rails.root.join("REGION") if defined?(Rails)
       region_num = File.read(region_file) if region_file && File.exist?(region_file)
+      puts "DISCOVERY 1: #{region_num}"
       region_num ||= ENV.fetch("REGION", nil)
+      puts "DISCOVERY 2: #{region_num}"
       region_num ||= region_number_from_sequence
+      puts "DISCOVERY 3: #{region_num}"
       region_num.to_i
     end
   end
