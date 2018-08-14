@@ -126,8 +126,9 @@ module ActiveRecord::IdRegions
 
     def region_number_from_sequence
       puts "FROM sequence 1"
-      sequence_name = connection.select_value("SELECT relname FROM pg_class WHERE relkind = 'S' ORDER BY relname LIMIT 1")
-      puts "FROM sequence 2: #{sequence_name}"
+      # sequence_name = connection.select_value("SELECT relname FROM pg_class WHERE relkind = 'S' ORDER BY relname LIMIT 1")
+      # puts "FROM sequence 2: #{sequence_name}"
+      sequence_name = "vim_performance_tag_values_id_seq"
       return if sequence_name.nil?
       # puts "FROM sequence 2.5: #{ActiveRecord::Base.connection.select_all("SELECT * FROM users_id_seq").first}"
       id_to_region(connection.select_value("SELECT last_value FROM #{sequence_name}")).tap { |i| puts "FROM sequence 3: #{i}" }
