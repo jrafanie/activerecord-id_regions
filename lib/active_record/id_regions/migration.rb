@@ -1,7 +1,6 @@
 module ActiveRecord::IdRegions
   module Migration
     def create_table(table_name, options = {})
-      options[:id] = :bigserial if options[:id].nil?
       value = anonymous_class_with_id_regions.rails_sequence_start
       super
       return if options[:id] == false
